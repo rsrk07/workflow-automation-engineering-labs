@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: outpass-workflow
+
+# Camunda 8 SaaS connection.
+# Values are read from environment variables so the client secret never gets committed to Git.
+# Get them from Console -> Cluster -> API -> Create client (scope: Zeebe / Orchestration Cluster) -> "Spring Boot" tab.
+camunda:
+  client:
+    mode: saas
+    auth:
+      client-id: ${CAMUNDA_CLIENT_ID}
+      client-secret: ${CAMUNDA_CLIENT_SECRET}
+    cloud:
+      cluster-id: ${CAMUNDA_CLUSTER_ID}
+      region: ${CAMUNDA_CLUSTER_REGION}

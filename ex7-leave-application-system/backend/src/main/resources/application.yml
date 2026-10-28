@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: leave-backend
+  datasource:
+    # H2 file database for local development; Docker Compose overrides these with PostgreSQL.
+    url: ${DB_URL:jdbc:h2:file:./data/leavedb}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+
+camunda:
+  client:
+    mode: self-managed
+    grpc-address: ${CAMUNDA_GRPC_ADDRESS:http://localhost:26500}
+    rest-address: ${CAMUNDA_REST_ADDRESS:http://localhost:8080}
+    # If authentication is enabled on your cluster, configure credentials according
+    # to its identity/authentication setup (do not assume demo/demo is always enabled).

@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "Exercise 6 - Start a Camunda 8 process using an API call",
+    "description": "Starts the leave-request process on Camunda 8 Run (C8 Run) through the Orchestration Cluster REST API v2.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" }
+  ],
+  "item": [
+    {
+      "name": "Check cluster topology",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v2/topology"
+      }
+    },
+    {
+      "name": "Start leave-request instance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Instance created', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.collectionVariables.set('processInstanceKey', body.processInstanceKey);",
+              "console.log('processInstanceKey = ' + body.processInstanceKey);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/v2/process-instances",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"processDefinitionId\": \"leave-request\",\n  \"variables\": {\n    \"employeeName\": \"Ravi\",\n    \"days\": 3\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Viva Q2 - wrong process ID",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/v2/process-instances",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"processDefinitionId\": \"leave-requst\",\n  \"variables\": {\n    \"employeeName\": \"Ravi\",\n    \"days\": 3\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Get the started instance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v2/process-instances/{{processInstanceKey}}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 16,
+  "id": "chief-warden-approval-form",
+  "type": "default",
+  "components": [
+    {
+      "text": "### Escalated out-pass request\n\nThe warden did not act within 24 hours, so this request was escalated to the Chief Warden.\n\n**Student:** {{studentName}} ({{regNo}})\n\n**Hostel block:** {{hostelBlock}}\n\n**Out date:** {{outDate}}\n\n**Return date:** {{returnDate}}\n\n**Nights:** {{nights}}\n\n**Purpose:** {{purpose}}\n\n**Parent phone:** {{parentPhone}}",
+      "type": "text",
+      "id": "Field_EscalationSummary",
+      "layout": { "row": "Row_Summary" }
+    },
+    {
+      "label": "Approve this out-pass",
+      "type": "checkbox",
+      "id": "Field_Approved",
+      "key": "approved",
+      "defaultValue": false,
+      "layout": { "row": "Row_Decision" }
+    },
+    {
+      "label": "Chief Warden remarks",
+      "type": "textarea",
+      "id": "Field_WardenRemarks",
+      "key": "wardenRemarks",
+      "layout": { "row": "Row_Remarks" }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+### 1. Day out -> auto-approved (outDate = returnDate, both in the future)
+POST http://localhost:8080/outpass
+Content-Type: application/json
+
+{
+  "studentName": "Priya",
+  "regNo": "RA2311003010001",
+  "hostelBlock": "Paari A",
+  "outDate": "2026-11-07",
+  "returnDate": "2026-11-07",
+  "parentPhone": "+91-9800000001",
+  "purpose": "Shopping in T. Nagar"
+}
+
+### 2. Two nights -> waits at Warden approval (approve it in Tasklist)
+POST http://localhost:8080/outpass
+Content-Type: application/json
+
+{
+  "studentName": "Karthik",
+  "regNo": "RA2311003010002",
+  "hostelBlock": "Kaari B",
+  "outDate": "2026-11-07",
+  "returnDate": "2026-11-09",
+  "parentPhone": "+91-9800000002",
+  "purpose": "Going home for a family function"
+}
+
+### 3. Return date before out date -> invalid -> REJECTED without the warden
+POST http://localhost:8080/outpass
+Content-Type: application/json
+
+{
+  "studentName": "Divya",
+  "regNo": "RA2311003010003",
+  "hostelBlock": "Oori C",
+  "outDate": "2026-11-10",
+  "returnDate": "2026-11-08",
+  "parentPhone": "+91-9800000003",
+  "purpose": "Medical appointment"
+}

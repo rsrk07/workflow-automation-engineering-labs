@@ -1,0 +1,61 @@
+{
+  "info": {
+    "name": "Exercise 8 - Hospital Appointment Booking (Camunda 8 REST API)",
+    "description": "Start the parent process for the three test cases and publish the cancellation message. Set the collection variables baseUrl and telegramChatId before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "telegramChatId", "value": "<your Telegram chat id>" }
+  ],
+  "item": [
+    {
+      "name": "Case 1 - Cardiology, bookedCount 3 (booking succeeds)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/v2/process-instances",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"processDefinitionId\": \"hospital-appointment-booking\",\n  \"variables\": {\n    \"patientId\": \"P1001\",\n    \"patientName\": \"Arun\",\n    \"department\": \"Cardiology\",\n    \"preferredSlot\": \"2026-10-30 10:00\",\n    \"bookedCount\": 3,\n    \"telegramChatId\": \"{{telegramChatId}}\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Case 2 - Cardiology, bookedCount 12 (slot full)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/v2/process-instances",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"processDefinitionId\": \"hospital-appointment-booking\",\n  \"variables\": {\n    \"patientId\": \"P1002\",\n    \"patientName\": \"Arun\",\n    \"department\": \"Cardiology\",\n    \"preferredSlot\": \"2026-10-30 11:00\",\n    \"bookedCount\": 12,\n    \"telegramChatId\": \"{{telegramChatId}}\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Case 3a - Successful booking to cancel later",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/v2/process-instances",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"processDefinitionId\": \"hospital-appointment-booking\",\n  \"variables\": {\n    \"patientId\": \"P1003\",\n    \"patientName\": \"Arun\",\n    \"department\": \"Cardiology\",\n    \"preferredSlot\": \"2026-10-31 09:30\",\n    \"bookedCount\": 4,\n    \"telegramChatId\": \"{{telegramChatId}}\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Case 3b - Publish cancel-booking message for P1003",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/v2/messages/publication",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"cancel-booking\",\n  \"correlationKey\": \"P1003\",\n  \"timeToLive\": 0,\n  \"variables\": {\n    \"cancelReason\": \"Patient requested cancellation\"\n  }\n}"
+        }
+      }
+    }
+  ]
+}

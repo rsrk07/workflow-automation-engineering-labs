@@ -1,0 +1,34 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 16,
+  "id": "leave-approval",
+  "type": "default",
+  "components": [
+    {
+      "text": "### Leave request #{{requestId}}\n\n**Employee:** {{employeeEmail}}\n\n**Leave type:** {{leaveType}}\n\n**Period:** {{startDate}} to {{endDate}} ({{days}} working day(s))",
+      "type": "text",
+      "id": "Field_RequestSummary",
+      "layout": { "row": "Row_Summary" }
+    },
+    {
+      "label": "Approve this request",
+      "type": "checkbox",
+      "id": "Field_Approved",
+      "key": "approved",
+      "defaultValue": false,
+      "layout": { "row": "Row_Decision" }
+    },
+    {
+      "label": "Comment",
+      "type": "textarea",
+      "id": "Field_ManagerComment",
+      "key": "managerComment",
+      "layout": { "row": "Row_Comment" }
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+             xmlns:modeler="http://camunda.org/schema/modeler/1.0"
+             id="Definitions_SlotDecision"
+             name="Slot decision"
+             namespace="http://camunda.org/schema/1.0/dmn"
+             exporter="Camunda Modeler"
+             exporterVersion="5.40.0"
+             modeler:executionPlatform="Camunda Cloud"
+             modeler:executionPlatformVersion="8.8.0">
+  <decision id="slot_decision" name="Slot decision">
+    <decisionTable id="DecisionTable_Slot" hitPolicy="UNIQUE">
+      <input id="Input_Department" label="Department">
+        <inputExpression id="InputExpression_Department" typeRef="string">
+          <text>department</text>
+        </inputExpression>
+      </input>
+      <input id="Input_BookedCount" label="Booked count">
+        <inputExpression id="InputExpression_BookedCount" typeRef="number">
+          <text>bookedCount</text>
+        </inputExpression>
+      </input>
+      <output id="Output_SlotStatus" label="Slot status" name="slotStatus" typeRef="string">
+        <outputValues id="UnaryTests_SlotStatusValues">
+          <text>"AVAILABLE","FULL"</text>
+        </outputValues>
+      </output>
+      <output id="Output_SuggestedAction" label="Suggested action" name="suggestedAction" typeRef="string" />
+      <rule id="Rule_Cardiology_Full">
+        <description>Cardiology capacity is 10 bookings per slot</description>
+        <inputEntry id="UnaryTests_R1_Dept"><text>"Cardiology"</text></inputEntry>
+        <inputEntry id="UnaryTests_R1_Count"><text>&gt;= 10</text></inputEntry>
+        <outputEntry id="LiteralExpression_R1_Status"><text>"FULL"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R1_Action"><text>"Offer the next available Cardiology slot or add the patient to the waitlist"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Cardiology_Available">
+        <inputEntry id="UnaryTests_R2_Dept"><text>"Cardiology"</text></inputEntry>
+        <inputEntry id="UnaryTests_R2_Count"><text>&lt; 10</text></inputEntry>
+        <outputEntry id="LiteralExpression_R2_Status"><text>"AVAILABLE"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R2_Action"><text>"Book the requested slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Orthopedics_Full">
+        <description>Orthopedics capacity is 8 bookings per slot</description>
+        <inputEntry id="UnaryTests_R3_Dept"><text>"Orthopedics"</text></inputEntry>
+        <inputEntry id="UnaryTests_R3_Count"><text>&gt;= 8</text></inputEntry>
+        <outputEntry id="LiteralExpression_R3_Status"><text>"FULL"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R3_Action"><text>"Offer the next available Orthopedics slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Orthopedics_Available">
+        <inputEntry id="UnaryTests_R4_Dept"><text>"Orthopedics"</text></inputEntry>
+        <inputEntry id="UnaryTests_R4_Count"><text>&lt; 8</text></inputEntry>
+        <outputEntry id="LiteralExpression_R4_Status"><text>"AVAILABLE"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R4_Action"><text>"Book the requested slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Neurology_Full">
+        <description>Neurology capacity is 6 bookings per slot</description>
+        <inputEntry id="UnaryTests_R5_Dept"><text>"Neurology"</text></inputEntry>
+        <inputEntry id="UnaryTests_R5_Count"><text>&gt;= 6</text></inputEntry>
+        <outputEntry id="LiteralExpression_R5_Status"><text>"FULL"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R5_Action"><text>"Offer the next available Neurology slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Neurology_Available">
+        <inputEntry id="UnaryTests_R6_Dept"><text>"Neurology"</text></inputEntry>
+        <inputEntry id="UnaryTests_R6_Count"><text>&lt; 6</text></inputEntry>
+        <outputEntry id="LiteralExpression_R6_Status"><text>"AVAILABLE"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R6_Action"><text>"Book the requested slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_General_Full">
+        <description>General Medicine capacity is 20 bookings per slot</description>
+        <inputEntry id="UnaryTests_R7_Dept"><text>"General Medicine"</text></inputEntry>
+        <inputEntry id="UnaryTests_R7_Count"><text>&gt;= 20</text></inputEntry>
+        <outputEntry id="LiteralExpression_R7_Status"><text>"FULL"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R7_Action"><text>"Offer the next available General Medicine slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_General_Available">
+        <inputEntry id="UnaryTests_R8_Dept"><text>"General Medicine"</text></inputEntry>
+        <inputEntry id="UnaryTests_R8_Count"><text>&lt; 20</text></inputEntry>
+        <outputEntry id="LiteralExpression_R8_Status"><text>"AVAILABLE"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R8_Action"><text>"Book the requested slot"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Other_Full">
+        <description>Any other department: capacity 15</description>
+        <inputEntry id="UnaryTests_R9_Dept"><text>not("Cardiology","Orthopedics","Neurology","General Medicine")</text></inputEntry>
+        <inputEntry id="UnaryTests_R9_Count"><text>&gt;= 15</text></inputEntry>
+        <outputEntry id="LiteralExpression_R9_Status"><text>"FULL"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R9_Action"><text>"Offer the next available slot in the same department"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Other_Available">
+        <inputEntry id="UnaryTests_R10_Dept"><text>not("Cardiology","Orthopedics","Neurology","General Medicine")</text></inputEntry>
+        <inputEntry id="UnaryTests_R10_Count"><text>&lt; 15</text></inputEntry>
+        <outputEntry id="LiteralExpression_R10_Status"><text>"AVAILABLE"</text></outputEntry>
+        <outputEntry id="LiteralExpression_R10_Action"><text>"Book the requested slot"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_SlotDecision">
+      <dmndi:DMNShape id="DMNShape_slot_decision" dmnElementRef="slot_decision">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
